@@ -1,1 +1,1 @@
-export declare function useIntentStatus(type: string): any;
+export declare function useIntentStatus(intentType: string): any;
