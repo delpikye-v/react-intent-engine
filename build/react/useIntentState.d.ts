@@ -1,1 +1,1 @@
-export declare function useIntentState<T>(selector: (s: any) => T): T;
+export declare function useIntentState<T = any>(intentType: string): T | undefined;
