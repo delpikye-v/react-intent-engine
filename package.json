@@ -1,0 +1,79 @@
+{
+  "name": "react-intent-engine-z",
+  "version": "1.0.0",
+  "description": "Intent-first orchestration engine for React applications",
+  "license": "MIT",
+  "author": "Delpi.Kye",
+
+  "sideEffects": false,
+
+  "main": "build/index.cjs",
+  "module": "build/index.esm.js",
+  "types": "build/index.d.ts",
+
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.esm.js",
+      "require": "./build/index.cjs"
+    }
+  },
+
+  "files": [
+    "build"
+  ],
+
+  "scripts": {
+    "clean": "rimraf build",
+    "build": "rollup -c",
+    "cb": "npm run clean && npm run build",
+    "prepublishOnly": "npm run build"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/delpikye-v/react-intent-engine.git"
+  },
+  "homepage": "https://github.com/delpikye-v/react-intent-engine#readme",
+  "bugs": {
+    "url": "https://github.com/delpikye-v/react-intent-engine/issues"
+  },
+
+  "keywords": [
+    "react",
+    "intent",
+    "intent-engine",
+    "orchestration",
+    "state-management",
+    "architecture",
+    "ddd",
+    "hexagonal",
+    "side-effects",
+    "async-flow",
+    "react-hooks",
+    "react-library"
+  ],
+
+  "peerDependencies": {
+    "react": ">=17"
+  },
+
+  "dependencies": {
+    "use-sync-external-store": "^1.6.0"
+  },
+
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "@types/react": "^17.0.90",
+
+    "rimraf": "^3.0.2",
+    "rollup": "^2.56.3",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.29.0",
+
+    "typescript": "^4.4.2",
+    "tslib": "^2.3.1"
+  }
+}
