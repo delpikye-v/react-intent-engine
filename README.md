@@ -7,19 +7,23 @@
 
 An **intent-first orchestration engine for React**.  
 Decouples UI from async flows, side effects, and business logic.  
+***react-intent-engine-z*** is a lightweight intent orchestration layer — not a state manager, not an event bus.  
 
 [Live Example](https://codesandbox.io/p/sandbox/kjstrf)
 
 ---
 
-### ✨ Why Use It
+### ✨ Why/When Use It
 
 - Separate business logic from UI
 - Handle async flows declaratively
 - Easy testing of intents
 - Supports multiple engines & scoped state
+- Complex user flows (login → fetch → redirect → notify)
+- Business logic should live outside components
+- Logic must be testable without React
 - Works with React 17+, React Query, DDD-style architectures
-
+  
 ---
 
 ### 📦 Installation
@@ -173,6 +177,27 @@ import { IntentProvider } from "react-intent-engine-z"
 - Each engine is scoped
 
 - Supports role-based UI and multiple async flows
+
+---
+
+### 🔍 Comparison: Intent Engine vs Redux vs Event Bus vs CQRS / Command Bus
+
+
+| Criteria          | **react-intent-engine-z**         | **Redux**                | **Event Bus**        | **CQRS / Command Bus**         |
+| ----------------- | --------------------------------- | ------------------------ | -------------------- | ------------------------------ |
+| Primary goal      | Orchestrate **behavior**          | Manage **state**         | Broadcast events     | Handle **commands & queries**  |
+| Core focus        | **Intent → flow → side effects**  | State → reducer → UI     | Event → listeners    | Command → handler              |
+| What UI calls     | `emit(intent)`                    | `dispatch(action)`       | `emit(event)`        | `dispatch(command)`            |
+| Where logic lives | **Intent handlers**               | Reducers / middleware    | Scattered listeners  | Command handlers               |
+| Execution order   | Controlled                        | Controlled (middleware)  | ❌ Not guaranteed    | Controlled                     |
+| Async flow        | ✅ Built-in                       | Via thunk / saga         | Ad-hoc               | ✅ First-class                  |
+| Side effects      | First-class                       | Middleware               | Ad-hoc               | First-class                    |
+| State required    | ❌ Optional                       | ✅ Required              | ❌                    | ❌                             |
+| Type safety       | ✅ Intent-based                   | Action-based             | ❌ Weak               | ✅ Strong                      |
+| Testability       | ✅ Easy (headless)                | Medium                   | ❌ Hard               | ✅ Easy                        |
+| Coupling          | Low                               | Medium                   | **High**             | Low                            |
+| Learning curve    | Low → Medium                      | High                     | Low                  | High                           |
+| Fit for React     | ✅ Excellent                      | ✅ Excellent              | ⚠️ Risky             | ⚠️ Overkill                    |
 
 ---
 
