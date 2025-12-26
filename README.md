@@ -5,9 +5,10 @@
 
 ---
 
-An **intent-first orchestration engine for React**.  
-Decouples UI from async flows, side effects, and business logic.  
-***react-intent-engine-z*** is a lightweight intent orchestration layer — not a state manager, not an event bus.  
+**react-intent-engine-z** is a lightweight intent orchestration layer   
++ Not a state manager, not an event bus.  
++ An **intent-first orchestration engine for React**.  
++ Decouples UI from async flows, side effects, and business logic.  
 
 [Live Example](https://codesandbox.io/p/sandbox/kjstrf)
 
@@ -31,11 +32,12 @@ Decouples UI from async flows, side effects, and business logic.
 ```bash
 npm install react-intent-engine-z use-sync-external-store
 ```
-- use-sync-external-store is required for React 17 compatibility.
+- `use-sync-external-store` is required for React 17 compatibility.
 
 ---
 
 ### 🧠 Mental Model
+
 ```bash
 UI Component
  └─ emits intent
@@ -51,8 +53,10 @@ Intent Engine
 ### 🚀 Basic Usage
 
 ##### 1️⃣ Create Engine
+
 ```ts
 import { createIntentEngine } from "react-intent-engine-z"
+// import { navigate } from "react-router-dom" // React Router v6
 
 export const authEngine = createIntentEngine({
   initialState: { auth: { user: null, loading: false } },
@@ -68,24 +72,37 @@ export const authEngine = createIntentEngine({
 ```
 
 ##### 2️⃣ Register Handlers
+
 ```ts
 authEngine.on("auth.login.submit", async (intent, ctx) => {
-  ctx.set("auth.loading", true)
-  const user = await ctx.effects.auth.login(intent.payload)
-  ctx.set("auth.user", user)
-  ctx.set("auth.loading", false)
+  try {
+    ctx.set({ auth: { ...ctx.get().auth, loading: true, error: null } })
+
+    // ✅ Common pattern: call effect
+    const user = await ctx.effects.auth.login(intent.payload)
+
+    // Update store
+    ctx.set({ auth: { ...ctx.get().auth, user, loading: false } })
+
+    // Navigate after success
+    // navigate("/dashboard")
+  } catch (err: any) {
+    ctx.set({ auth: { ...ctx.get().auth, error: err.message, loading: false } })
+  }
 })
 ```
 ##### 3️⃣ Provide Engine to React
 
 ```ts
 import { IntentProvider } from "react-intent-engine-z"
+
 <IntentProvider engine={authEngine}>
-  <LoginForm />
+  <LoginButton />
 </IntentProvider>
 ```
 
 ##### 4️⃣ Emit Intent from UI
+
 ```tsx
 import { useIntent, useIntentState } from "react-intent-engine-z"
 
@@ -159,6 +176,9 @@ await engine.emit({
 
 expect(engine.store.getState().auth.user).toBeDefined()
 ```
+
+- separates business logic and side effects from UI, making intents fully testable without rendering React components.
+
 ---
 
 ### ⚡ Multiple Engines
@@ -172,10 +192,9 @@ import { IntentProvider } from "react-intent-engine-z"
 <IntentProvider engine={notifEngine}>
   <NotificationCenter />
 </IntentProvider>
-
 ```
-- Each engine is scoped
 
+- Each engine is scoped
 - Supports role-based UI and multiple async flows
 
 ---
